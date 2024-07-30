@@ -8,25 +8,26 @@ export const sendEmail = async({ email , emailtype ,userId}:any) => {
 
     // now we have to hash the token and conditon for the verify and the rest 
 
-    const hashToken = await bcryptjs.hash(toString() , 10);
+    const hashToken = await bcryptjs.hash(userId.toString() , 10);
 
     if (emailtype === 'VERIFY') {
         await User.findByIdAndUpdate(userId , {
-            verifyToken: hashToken }, {verifyTokenExpi: Date.now() + 36000000}
+            verifyToken: hashToken }, {verifyTokenExpi: Date.now() + 3600000}
         )
     } else if(emailtype === 'RESET'){
         await User.findByIdAndUpdate(userId , {
-            frogetPasswordToken: hashToken }, {frogetPasswordTokenExpi: Date.now() + 36000000}
+            frogetPasswordToken: hashToken }, {frogetPasswordTokenExpi: Date.now() + 3600000}
         )
     }
     
     try {
+        // configure the mail transport
         var transport = nodemailer.createTransport({
             host: "sandbox.smtp.mailtrap.io",
             port: 2525,
             auth: {
               user: "1465eb8657fb86",// ALWAYS PUT THESE THINGS IN THE .ENV FILES 
-              pass: "nskvn84d9f6" // THIS ALSO 
+              pass: "********d9f6" // THIS ALSO 
             }
           });
 
@@ -42,9 +43,11 @@ export const sendEmail = async({ email , emailtype ,userId}:any) => {
       }
 
       const mailresponse = await transport.sendMail(emailOption);
+      console.log('Email sent successfully:', mailresponse);
       return mailresponse;
 
     } catch (error:any) {
+        console.error('Error sending email:', error);
         throw new Error(error.message)
     }
 };

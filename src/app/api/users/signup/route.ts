@@ -23,7 +23,9 @@ export async function POST(request: NextRequest){ // using async fxn as the data
         }
 
         const salt = await bcryptjs.genSalt(10);
-        const hasspassword = await bcryptjs.hash(salt , password);
+        const hasspassword = await bcryptjs.hash(password , salt);
+        // as in the upper code we pass the password as the fost argument becox 
+        // first we send the plai  texr and the salt we convert it into the hasshedpassword 
 
         // now modify the user
 

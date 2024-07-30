@@ -5,25 +5,25 @@ import { PassThrough } from 'stream';
 
 const userSchema = new mongoose.Schema({
     username: {
-        typeof: String,
+        type: String,
         required: [ true , 'Please enter a username'],
         unique: true
     },
     email: {
-        typeof: String,
+        type: String,
         required: [ true , 'Please enter a email'],
         unique: true
     },
     password: {
-        typeof: String,
+        type: String,
         required: [ true , 'Please enter a password'],
     },
     isverified: {
-        typeof: String,
+        type: String,
         default: false
     },
     isAdmin: {
-        typeof: String,
+        type: String,
         default: false
     },
     frogetPasswordToken: String,
@@ -33,7 +33,6 @@ const userSchema = new mongoose.Schema({
 
 
 });
-
 
 const User = mongoose.models.users || mongoose.model("users" , userSchema);
 

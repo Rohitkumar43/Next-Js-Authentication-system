@@ -1,23 +1,28 @@
 import mongoose from 'mongoose';
+import dotenv from 'dotenv';
 
+// Load environment variables from .env file
+dotenv.config();
 
-// alwys keep inthe mind when you connect the database alwauys use the assync function 
-export async function connectDatabase(){
-    try {
-        mongoose.connect(process.env.MONGO_URL!);
-        const connection = mongoose.connection;
-        // learn some event of the mongoose 
-
-        connection.on('connected' , () => {
-            console.log("MongoDb is connected succesfully");
-        });
-
-        connection.on('error' , () => {
-            console.log("MongoDb is not connected");
-        })
-
-    } catch (error) {
-        console.log("Something went wrong in connecting the database");
-        console.log(error);
+// Connect to the database
+export async function connectDatabase() {
+  try {
+    const uri = process.env.MONGODB_URI;
+    if (!uri) {
+      throw new Error('MONGODB_URI is not defined');
     }
+
+    await mongoose.connect(uri);
+    const connection = mongoose.connection;
+
+    connection.on('connected', () => {
+      console.log('MongoDB connected successfully');
+    });
+
+    connection.on('error', (err) => {
+      console.error('MongoDB connection error:', err);
+    });
+  } catch (error) {
+    console.error('Something went wrong in connecting to the database', error);
+  }
 }
